@@ -5,6 +5,7 @@
 //  Created by Justin Hui on 20/1/2024.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,5 +14,6 @@ struct EnhancedTodolistApp: App {
         WindowGroup {
             LandingView()
         }
+        .modelContainer(for: TodoItem.self)
     }
 }
