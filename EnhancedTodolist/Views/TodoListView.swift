@@ -11,6 +11,9 @@ struct TodoListView: View {
     
     // MARK: Stored properties
     
+    //The search term the user provides
+    @State var searchText = ""
+    
     // The item currently being created
     @State private var newItemDetails = ""
     
@@ -18,7 +21,18 @@ struct TodoListView: View {
     @State private var items: [TodoItem] = []
     
     // MARK: Computed properties
+    
+    //filtering the array of items
+    var filteredItems: [TodoItem] {
+        if searchText.isEmpty {
+            return items
+        } else {
+            return items.filter { $0.details.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
+
     var body: some View {
+        
         NavigationStack {
             VStack {
                 
@@ -48,7 +62,7 @@ struct TodoListView: View {
                 } else {
                     
                     List {
-                        ForEach(items) { currentItem in
+                        ForEach(filteredItems) { currentItem in
                             Label {
                                 Text(currentItem.details)
                             } icon: {
@@ -60,11 +74,11 @@ struct TodoListView: View {
                         }
                         .onDelete(perform: removeRows)
                     }
-
                 }
             }
             .navigationTitle("Tasks")
         }
+        .searchable(text: $searchText)
         .onAppear {
             // Populate with example data
             if items.isEmpty {
